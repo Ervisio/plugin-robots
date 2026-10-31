@@ -2,7 +2,7 @@
   "id": "robots",
   "name": "Browser Robots",
   "description": "Open a real Chromium browser inside Ervisio, automate interactions, record workflows and replay them with Playwright.",
-  "author": "Ervisio",
+  "author": "Ervisio Community",
   "version": "0.1.0",
   "minCore": "0.5.0",
   "platforms": ["linux"],
