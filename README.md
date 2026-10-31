@@ -1,4 +1,4 @@
-# Browser Robots for Ervisio — alpha 0.1.0
+# Browser Robots for Ervisio — alpha 0.1.1
 
 A **real remote Chromium browser inside Ervisio** (not an iframe that sites can block). Open a browser session, navigate pages, click directly on a live screenshot, type into fields, scroll, use basic keyboard keys, save screenshots, and record/replay workflows using Playwright.
 
@@ -13,18 +13,14 @@ A **real remote Chromium browser inside Ervisio** (not an iframe that sites can 
 
 ## Installation (Linux)
 
-1. Requires **Ervisio 0.5+**, Linux + systemd, **Node.js 20+**, npm, and networking for the initial Playwright browser download.
-2. Enable Plugins → Developer and load the `plugin/` directory.
-3. Inspect and install the runtime:
+1. Install Browser Robots from the Ervisio marketplace (signed plugin), then open the plugin page.
+2. The page checks the Unix socket and **automatically starts the setup** when the runtime is absent. Approve Ervisio's administrator unlock once. No SSH or manual commands are needed.
+3. Setup installs an isolated Node.js 22 runtime if necessary (x86_64/aarch64), Playwright, Chromium, and browser dependencies (automatically through apt on Debian/Ubuntu), then creates/enables/starts `ervisio-browser-robots.service`.
+4. Setup is run in a transient systemd unit; it continues even if you close the UI. The plugin shows its state and provides **Show logs** and **Install / Repair** controls. Recorded workflows are preserved on repair.
 
-   ```bash
-   sudo sh plugin/runtime/install.sh
-   ```
+This automatic setup currently expects marketplace installation in `/var/lib/ervisio/plugins/robots`. Developer-mode plugins loaded from arbitrary external paths must be installed/copied to this standard location, or the setup action will explain the missing path. Non-APT Linux distributions may need additional OS libraries for Chromium; inspect the installation log if browser launch fails.
 
-   The installer creates a dedicated `ervisio-browser` non-login account, installs the Playwright npm dependency and Chromium under `/opt/ervisio-browser-robots`, and enables `ervisio-browser-robots.service`. If the host is missing browser OS libraries, run `npx playwright install-deps chromium` in the runtime directory as root (this modifies OS packages).
-4. Open **Browser Robots** in Ervisio and unlock administrator rights. Click **Apri browser** and navigate to your test site.
-
-The installed plugin path (outside developer mode) is typically `/var/lib/ervisio/plugins/robots/runtime/install.sh`.
+The plugin declares a small set of allowlisted control commands. Only the installation/repair and diagnostic-log actions request administrator rights. Service status checks do not.
 
 ## Architecture
 
